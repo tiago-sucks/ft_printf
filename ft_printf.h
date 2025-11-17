@@ -3,18 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tiago <tiago@student.42.fr>                +#+  +:+       +#+        */
+/*   By: tsimao-g <tsimao-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 19:08:38 by tiago             #+#    #+#             */
-/*   Updated: 2025/11/16 19:08:41 by tiago            ###   ########.fr       */
+/*   Updated: 2025/11/17 17:58:57 by tsimao-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
-# include <stdarg.h>
-# include <unistd.h>
+#include <stdarg.h>
+#include <unistd.h>
+#include <stdio.h>
 
 int	ft_printf(char const *str, ...);
 int	ft_putchar(char c);

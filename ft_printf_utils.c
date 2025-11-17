@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tiago <tiago@student.42.fr>                +#+  +:+       +#+        */
+/*   By: tsimao-g <tsimao-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 19:05:42 by tiago             #+#    #+#             */
-/*   Updated: 2025/11/16 19:16:02 by tiago            ###   ########.fr       */
+/*   Updated: 2025/11/17 19:23:25 by tsimao-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,5 +17,13 @@ int	ft_putchar(char c)
 
 int ft_putstr(char *s)
 {
-    
+    int i;
+
+    i = 0;
+    if(!s)
+        return(write(1, "(null)", 6));
+    while (s[i])
+    {
+        return
+    }
 }
