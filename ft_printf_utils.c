@@ -6,9 +6,23 @@
 /*   By: tsimao-g <tsimao-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 19:05:42 by tiago             #+#    #+#             */
-/*   Updated: 2025/11/17 19:23:25 by tsimao-g         ###   ########.fr       */
+/*   Updated: 2025/11/20 18:29:11 by tsimao-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "ft_printf.h"
+
+size_t ft_strlen(char *s)
+{
+    int i;
+    
+    i = 0;
+    while(s[i])
+    {
+        i++;
+    }
+    return (i);
+}
 
 int	ft_putchar(char c)
 {
@@ -17,13 +31,44 @@ int	ft_putchar(char c)
 
 int ft_putstr(char *s)
 {
-    int i;
+    int len;
 
-    i = 0;
-    if(!s)
-        return(write(1, "(null)", 6));
-    while (s[i])
-    {
-        return
-    }
+    len = (int) ft_strlen(s);
+    if (write(1, s, len) == -1)
+        return (-1);
+    return (len);
+}
+
+int	ft_putnbr(long nb)
+{
+	long		num;
+	int			len;
+	int			aux;
+
+	len = 0;
+	if (nb < 0)
+	{
+		if (write(1, "-", 1) == -1)
+			return (-1);
+		len++;
+		nb *= -1;
+	}
+	num = nb % 10 + '0';
+	if (nb > 9)
+	{
+		aux = ft_putnbr(nb / 10);
+		if (aux == -1)
+			return (-1);
+		len += aux;
+	}
+	if (write(1, &num, 1) == -1)
+		return (-1);
+	len++;
+	return (len);
+}
+
+int main()
+{
+    char dor[] = "teste";
+    printf("\n%d", ft_putstr(dor));
 }
