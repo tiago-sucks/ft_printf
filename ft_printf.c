@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tiago <tiago@student.42.fr>                +#+  +:+       +#+        */
+/*   By: tsimao-g <tsimao-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 18:57:13 by tiago             #+#    #+#             */
-/*   Updated: 2025/11/18 17:39:26 by tiago            ###   ########.fr       */
+/*   Updated: 2025/11/28 19:31:00 by tsimao-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,5 +111,4 @@ int main(void)
     printf("Negatives: %d %u %x\n", -1, (unsigned int)(-1), (unsigned int)(-1));
     printf("Edge values: %d %u\n", INT_MIN,UINT_MAX);
 
-    return (0);
 }
