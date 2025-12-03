@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsimao-g <tsimao-g@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tiago <tiago@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 19:05:42 by tiago             #+#    #+#             */
-/*   Updated: 2025/11/28 20:39:48 by tsimao-g         ###   ########.fr       */
+/*   Updated: 2025/11/30 20:06:04 by tiago            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,12 +88,28 @@ int	ft_puthex(unsigned long nbr, char up)
 		len += temp;
 	}
 	mod = nbr % 16;
-	if (write(1, &base[mod], 1) == -1) //putnbr mas converte o numero para a base de hexadecimal
+	if (write(1, &base[mod], 1) == -1) //putnbr mas converte o numero para a base de hexadecimal usando a devida posição do pointer base
 		return (-1);
 	len += 1;
 	return (len);
 }
 
+int	ft_putptr(void *ptr)
+{
+	int	len;
+	int	temp;
+
+	len = 0;
+	temp = 0;
+	if (ft_putstr("0x") == -1)
+		return (0);
+	len += 2;
+	temp = ft_putnbr_hexa((unsigned long)ptr, 'x');
+	if (temp == -1)
+		return (len);
+	len += temp;
+	return (len);
+}
 
 int main()
 {
@@ -105,4 +121,4 @@ int main()
 	printf("\n%d\n", ft_putstr(dor));
 }
 
-//$? retorna sempre o ultimo returno da main
+//$? retorna sempre o ultimo return da main

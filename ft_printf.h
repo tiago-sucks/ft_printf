@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsimao-g <tsimao-g@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tiago <tiago@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 19:08:38 by tiago             #+#    #+#             */
-/*   Updated: 2025/11/17 17:58:57 by tsimao-g         ###   ########.fr       */
+/*   Updated: 2025/12/03 17:06:47 by tiago            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 int	ft_printf(char const *str, ...);
 int	ft_putchar(char c);
 int	ft_putnbr(long nb);
-int	ft_putnbr_hexa(unsigned long nbr, char up);
+int	ft_puthex(unsigned long nbr, char up);
 int	ft_putptr(void *ptr);
 int	ft_putstr(char *str);
 
