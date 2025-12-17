@@ -6,7 +6,7 @@
 /*   By: tiago <tiago@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 18:57:13 by tiago             #+#    #+#             */
-/*   Updated: 2025/12/03 17:06:53 by tiago            ###   ########.fr       */
+/*   Updated: 2025/12/17 21:12:55 by tiago            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,7 @@ static int	ft_conversion(const char type, va_list vargs)
 	if (type == 'c')
 		return (ft_putchar(va_arg(vargs, int)));
 	else if (type == 'u')
-    {
-        printf("funfa");
 		return (ft_putnbr(va_arg(vargs, unsigned int)));
-    }
 	else if ((type == 'i') || (type == 'd'))
 		return (ft_putnbr(va_arg(vargs, int)));
 	else if (type == 's')
@@ -31,14 +28,39 @@ static int	ft_conversion(const char type, va_list vargs)
 		return (ft_putptr(va_arg(vargs, void *)));
 	else if (type == '%')
 		return (ft_putchar('%'));
+	else
+		return (-1);
 }
-
 
 int	ft_printf(char const *str, ...)
 {
 	va_list	vargs;
-	
+	int		len;
+	int		check;
+
+	va_start(vargs, str);
+	len = 0;
+	while (*str)
+	{
+		if (*str == '%')
+		{
+			check = ft_conversion(*(++str), vargs);
+			if (check == -1)
+				return (-1);
+			len += check;
+		}
+		else
+		{
+			if (write(1, str, 1) == -1)
+				return (-1);
+			len++;
+		}
+		str++;
+	}
+	va_end(vargs);
+	return (len);
 }
+
 // %c - character
 // NULL char: retorna nada
 
@@ -54,87 +76,77 @@ int	ft_printf(char const *str, ...)
 // %X - hexadecimal uppercase
 // %% - followed by another % character will write a single % to the stream
 
-#include <limits.h> //library para limites de casts
-
-
+// #include <limits.h> //library para limites de casts
 
 // int main(void)
 // {
-//     char			c = 'A';
-//     char			*s = "Hello World";
-//     char			*null_s = NULL;
-//     void			*p = (void *)198723;
-//     void			*null_p = NULL;
-//     int				d = -42;
-//     int				i = 123;
-//     unsigned int	u = 4294967295;
-//     unsigned int	x = 255;
-//     unsigned int	X = 255;
-//     int				zero = 0;
-//     int				negative = -1;
-//     unsigned int	large_hex = 0xDEADBEEF;
+// 	int x = 42;
 
-//     printf("=== Testing printf format specifiers ===\n\n");
+// 	//%c tests
+// 	ft_printf("--- %%c tests ---\n");
+// 	ft_printf("%c\n", 'a');
+// 	ft_printf("%c%c%c\n", 'A', 'B', 'C');
+// 	ft_printf("%c\n", 0);
 
-//     printf("%%c (character):\n");
-//     printf("  Standard: %c\n", c);
-//     printf("  NULL char (empty output): %c\n", '\0');
-//     printf("  Control char (tab): %c|\n", '\t');
-//     printf("  Digit char: %c\n\n", '5');
+// 	//%s tests
+// 	ft_printf("\n--- %%s tests ---\n");
+// 	ft_printf("%s\n", "Hello");
+// 	ft_printf("%s\n", "");
+// 	ft_printf("%s\n", (char *)NULL);
 
-//     printf("%%s (string):\n");
-//     printf("  Standard: %s\n", s);
-//     printf("  NULL string: %s\n", null_s);
-//     printf("  Empty string: '%s'\n", "");
-//     printf("  String with spaces: '%s'\n\n", "Hello World Test");
+// 	//%p tests
+// 	ft_printf("\n--- %%p tests ---\n");
+// 	ft_printf("%p\n", &x);
+// 	ft_printf("%p\n", NULL);
+// 	ft_printf("%p\n", (void *)0xFFFFFFFF);
 
-//     printf("%%p (pointer):\n");
-//     printf("  Standard: %p\n", p);
-//     printf("  NULL pointer: %p\n", null_p);
-//     printf("  High address: %p\n\n", (void *)0xFFFFFFFF);
+// 	//%d tests
+// 	ft_printf("\n--- %%d tests ---\n");
+// 	ft_printf("%d\n", 0);
+// 	ft_printf("%d\n", 42);
+// 	ft_printf("%d\n", -42);
+// 	ft_printf("%d\n", INT_MAX);
+// 	ft_printf("%d\n", INT_MIN);
 
-//     printf("%%d (signed integer):\n");
-//     printf("  Positive: %d\n", 42);
-//     printf("  Negative: %d\n", d);
-//     printf("  Zero: %d\n", zero);
-//     printf("  INT_MIN: %d\n", INT_MIN);
-//     printf("  INT_MAX: %d\n\n", INT_MAX);
+// 	//%i tests
+// 	ft_printf("\n--- %%i tests ---\n");
+// 	ft_printf("%i\n", 0);
+// 	ft_printf("%i\n", 123);
+// 	ft_printf("%i\n", -123);
+// 	ft_printf("%i\n", INT_MAX);
+// 	ft_printf("%i\n", INT_MIN);
 
-//     printf("%%i (signed integer):\n");
-//     printf("  Positive: %i\n", i);
-//     printf("  Negative: %i\n", negative);
-//     printf("  Zero: %i\n", zero);
-//     printf("  INT_MIN: %i\n", INT_MIN);
-//     printf("  INT_MAX: %i\n\n", INT_MAX);
-// 	printf("  INT_MAX: %i\n\n", INT_MAX);
+// 	//%u tests
+// 	ft_printf("\n--- %%u tests ---\n");
+// 	ft_printf("%u\n", 0);
+// 	ft_printf("%u\n", 42);
+// 	ft_printf("%u\n", UINT_MAX);
+// 	ft_printf("%u\n", -1);
 
-//     printf("%%u (unsigned integer):\n");
-//     printf("  Small value: %u\n", 42);
-//     printf("  Zero: %u\n", zero);
-//     printf("  UINT_MAX: %u\n\n",UINT_MAX);
+// 	//%x tests
+// 	ft_printf("\n--- %%x tests ---\n");
+// 	ft_printf("%x\n", 0);
+// 	ft_printf("%x\n", 42);
+// 	ft_printf("%x\n", 255);
+// 	ft_printf("%x\n", INT_MAX);
+// 	ft_printf("%x\n", UINT_MAX);
 
-//     printf("%%x (hex lowercase):\n");
-//     printf("  Zero: %x\n", 0);
-//     printf("  Small (15): %x\n", 15);
-//     printf("  Standard (255): %x\n", 255);
-//     printf("  Large (4095): %x\n", 4095);
-//     printf("  0xDEADBEEF: %x\n\n", large_hex);
+// 	//%X tests
+// 	ft_printf("\n--- %%X tests ---\n");
+// 	ft_printf("%X\n", 0);
+// 	ft_printf("%X\n", 42);
+// 	ft_printf("%X\n", 255);
+// 	ft_printf("%X\n", INT_MAX);
+// 	ft_printf("%X\n", UINT_MAX);
 
-//     printf("%%X (hex uppercase):\n");
-//     printf("  Zero: %X\n", 0);
-//     printf("  Small (15): %X\n", 15);
-//     printf("  Standard (255): %X\n", 255);
-//     printf("  Large (4095): %X\n", 4095);
-//     printf("  0xDEADBEEF: %X\n\n", large_hex);
+// 	//%% tests
+// 	ft_printf("\n--- %%%% tests ---\n");
+// 	ft_printf("%%\n");
+// 	ft_printf("%%%%\n");
+// 	ft_printf("100%%\n");
 
-//     printf("%%%% (percent sign):\n");
-//     printf("  Single: %%\n");
-//     printf("  Double: %%%%\n");
-//     printf("  Triple: %%%%%%\n\n");
+// 	ft_printf("\n--- other tests ---\n");
+// 	ft_printf("%c %s %p %d %i %u %x %X %%\n", 'Z', "qw", &x, -1, 2, 42, 42, 42);
 
-//     printf("=== Complex Mixed Cases ===\n");
-//     printf("All together: %c %s %p %d %u %x %X %%\n", c, s, p, d, u, x, X);
-//     printf("Negatives: %d %u %x\n", -1, (unsigned int)(-1), (unsigned int)(-1));
-//     printf("Edge values: %d %u\n", INT_MIN,UINT_MAX);
-
+// 	return (0);
 // }

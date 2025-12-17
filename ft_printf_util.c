@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf_utils.c                                  :+:      :+:    :+:   */
+/*   ft_printf_util.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tiago <tiago@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 19:05:42 by tiago             #+#    #+#             */
-/*   Updated: 2025/11/30 20:06:04 by tiago            ###   ########.fr       */
+/*   Updated: 2025/12/17 21:15:48 by tiago            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 int	ft_putchar(char c)
 {
-	return(write(1, &c, 1));
+	if (write(1, &c, 1) == -1)
+		return (-1);
+	return (1);
 }
-
 
 int	ft_putstr(char *s)
 {
@@ -24,7 +25,9 @@ int	ft_putstr(char *s)
 
 	if (!s)
 	{
-		return (write (1, "(null)", 6) == -1);
+		if (write(1, "(null)", 6) == -1)
+			return (-1);
+		return (6);
 	}
 	len = 0;
 	while (*s != '\0')
@@ -37,10 +40,9 @@ int	ft_putstr(char *s)
 	return (len);
 }
 
-
 int	ft_putnbr(long nb)
 {
-	long		sum;
+	char		sum;
 	int			len;
 	int			temp;
 
@@ -52,7 +54,6 @@ int	ft_putnbr(long nb)
 		len++;
 		nb *= -1;
 	}
-	sum = nb % 10 + '0';
 	if (nb > 9)
 	{
 		temp = ft_putnbr(nb / 10);
@@ -60,12 +61,12 @@ int	ft_putnbr(long nb)
 			return (-1);
 		len += temp;
 	}
+	sum = (nb % 10) + '0';
 	if (write(1, &sum, 1) == -1) //ele printa sempre o número, mas verifica se a sum for -1, retorna -1
 		return (-1);
 	len++;
 	return (len);
 }
-
 
 int	ft_puthex(unsigned long nbr, char up)
 {
@@ -80,7 +81,7 @@ int	ft_puthex(unsigned long nbr, char up)
 		base = "0123456789ABCDEF";
 	else
 		base = "0123456789abcdef";
-	if (nbr > 15)
+	if (nbr >= 16)
 	{
 		temp = ft_puthex((nbr / 16), up);
 		if (temp == -1)
@@ -88,7 +89,7 @@ int	ft_puthex(unsigned long nbr, char up)
 		len += temp;
 	}
 	mod = nbr % 16;
-	if (write(1, &base[mod], 1) == -1) //putnbr mas converte o numero para a base de hexadecimal usando a devida posição do pointer base
+	if (write(1, &base[mod], 1) == -1)
 		return (-1);
 	len += 1;
 	return (len);
@@ -99,26 +100,22 @@ int	ft_putptr(void *ptr)
 	int	len;
 	int	temp;
 
+	if (!ptr)
+	{
+		if (write(1, "(nil)", 5) == -1)
+			return (-1);
+		return (5);
+	}
 	len = 0;
-	temp = 0;
-	if (ft_putstr("0x") == -1)
-		return (0);
+	if (write(1, "0x", 2) == -1)
+		return (-1);
 	len += 2;
-	temp = ft_putnbr_hexa((unsigned long)ptr, 'x');
+	temp = ft_puthex((unsigned long)ptr, 'x');
 	if (temp == -1)
-		return (len);
+		return (-1);
 	len += temp;
 	return (len);
 }
 
-int main()
-{
-	char *dor = NULL;
-	int nomerus = 1235;
-	char up = 'x';
-
-	printf("\n%d\n", ft_puthex(nomerus, up));
-	printf("\n%d\n", ft_putstr(dor));
-}
-
 //$? retorna sempre o ultimo return da main
+//puthex é tipo putnbr mas o numero para a base de hexadecimal usando a devida posição do pointer base
