@@ -97,20 +97,15 @@ This approach was chosen because:
 
 The implementation primarily uses:
 
-**Variadic Function Mechanism** (`va_list`):
+**Variadic Function** (`va_list`):
 - A `va_list` variable stores the state needed to traverse variable arguments
 - Used to retrieve arguments dynamically based on format specifiers
 - Essential for handling an unknown number of arguments at compile time
 
-**Character Buffer Strategy**:
+**Character Buffer**:
 - Direct output using `write()` system call for individual characters or strings
 - No intermediate buffering for simplicity (though this could be optimized with a buffer)
 - Each handler function returns the number of characters written
-
-**Function Pointer Alternative** (optional optimization):
-- Could implement a lookup table mapping format characters to handler functions
-- Would replace the if-else chain with array indexing for O(1) specifier lookup
-- Trade-off: Slightly more complex initialization for marginal performance gain
 
 The chosen structure prioritizes **code clarity and correctness** over premature optimization, as the performance difference is negligible for typical use cases. The modular function design makes testing and debugging straightforward, which is critical for this foundational project.
 
