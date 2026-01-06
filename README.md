@@ -80,34 +80,106 @@ int main(void)
 
 ### Algorithm Choice
 
-The implementation follows a **state machine parsing approach** with modular handler functions:
+The implementation follows a **linear parsing algorithm** with a **dispatch pattern** for format handling:
 
-1. **String Traversal**: Iterate through the format string character by character
-2. **Format Detection**: When a `%` is encountered, enter format specifier parsing mode
-3. **Specifier Dispatch**: Based on the character following `%`, call the appropriate handler function
-4. **Character Counting**: Track and return the total number of characters printed
+#### Core Algorithm: Linear String Parsing
 
-This approach was chosen because:
-- **Simplicity**: Easy to understand and maintain
-- **Modularity**: Each format specifier has its own handler function, making the code modular and testable
-- **Efficiency**: Single pass through the format string with O(n) time complexity
-- **Extensibility**: New format specifiers can be added by creating new handler functions
+```
+1. Initialize va_list to access variadic arguments
+2. Initialize character counter (len = 0)
+3. FOR each character in format string:
+   a. IF character is '%':
+      - Advance to next character (specifier)
+      - DISPATCH to appropriate handler based on specifier
+      - Add returned length to counter
+   b. ELSE:
+      - Write character directly to stdout
+      - Increment counter
+4. Cleanup va_list
+5. Return total character count
+```
 
-### Data Structure
+#### Performance
 
-The implementation primarily uses:
+**Time (how fast)**: The algorithm processes each character in the format string exactly once. If you double the input size, the processing time roughly doubles — this is called **linear scaling**.
 
-**Variadic Function** (`va_list`):
-- A `va_list` variable stores the state needed to traverse variable arguments
-- Used to retrieve arguments dynamically based on format specifiers
-- Essential for handling an unknown number of arguments at compile time
+**Memory (how much space)**: The recursive number conversion functions use the call stack. For a number like 1000, the function calls itself 4 times (1000 → 100 → 10 → 1). The memory used grows very slowly compared to the number size — this is called **logarithmic scaling**.
 
-**Character Buffer**:
-- Direct output using `write()` system call for individual characters or strings
-- No intermediate buffering for simplicity (though this could be optimized with a buffer)
-- Each handler function returns the number of characters written
+#### Why This Algorithm?
 
-The chosen structure prioritizes **code clarity and correctness** over premature optimization, as the performance difference is negligible for typical use cases. The modular function design makes testing and debugging straightforward, which is critical for this foundational project.
+1. **Single-Pass Efficiency**: The format string is traversed exactly once, minimizing overhead.
+
+2. **Immediate Output**: Characters are written directly via `write()` without intermediate buffering, reducing memory usage.
+
+3. **Recursive Base Conversion**: For `ft_putnbr` and `ft_puthex`, recursion naturally handles digit ordering (most significant first) without requiring:
+   - Pre-calculated digit count
+   - Temporary buffer allocation
+   - String reversal
+
+   Example for number 42 in decimal:
+   ```
+   ft_putnbr(42) → ft_putnbr(4) → writes '4' → returns → writes '2'
+   ```
+
+4. **Dispatch Pattern over Function Pointers**: The `ft_conversion` function uses if-else chains rather than a function pointer table because:
+   - Only 9 specifiers exist (minimal performance difference)
+   - Simpler to read and debug
+   - No initialization overhead
+   - Compiler can optimize the comparisons efficiently
+
+### Data Structures
+
+#### 1. `va_list` (Variadic Argument List)
+
+The core data structure enabling variable argument handling:
+
+```c
+va_list vargs;
+va_start(vargs, str);    // Initialize after last fixed parameter
+va_arg(vargs, type);     // Extract next argument with specified type
+va_end(vargs);           // Cleanup
+```
+
+**Justification**: `va_list` is the only portable way in C to handle functions with unknown argument counts at compile time. It provides sequential access to arguments pushed on the stack.
+
+#### 2. Character Array as Lookup Table
+
+For hexadecimal conversion in `ft_puthex`:
+
+```c
+char *base = "0123456789abcdef";  // or uppercase variant
+```
+
+**Justification**: Using a string as a lookup table provides instant digit-to-character conversion via direct indexing (`base[remainder]`), avoiding conditional logic for each hex digit.
+
+#### 3. Implicit Stack (Recursion)
+
+The recursive functions use the call stack to:
+- Store intermediate division results
+- Ensure correct digit ordering (MSB first)
+- Handle sign separately before recursion
+
+**Trade-off**: Recursion depth is bounded by the number of digits (max ~20 for 64-bit numbers in decimal), making stack overflow practically impossible for valid inputs.
+
+### Error Handling Strategy
+
+All output functions return `-1` on `write()` failure, propagating errors upward:
+
+```c
+if (write(1, &c, 1) == -1)
+    return (-1);
+```
+
+This ensures `ft_printf` can detect and report I/O errors, matching the behavior of standard `printf()` which returns a negative value on output error.
+
+### Design Decisions Summary
+
+| Decision | Alternative | Justification |
+|----------|-------------|---------------|
+| Recursive conversion | Iterative with buffer | Simpler code, automatic digit ordering |
+| Direct `write()` | Buffered output | Lower memory, simpler implementation |
+| If-else dispatch | Function pointer table | Clearer code for small specifier set |
+| Return length counting | Void functions | Matches `printf()` specification |
 
 ## Resources
 
