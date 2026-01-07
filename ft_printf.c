@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tiago <tiago@student.42.fr>                +#+  +:+       +#+        */
+/*   By: tsimao-g <tsimao-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 18:57:13 by tiago             #+#    #+#             */
-/*   Updated: 2025/12/17 21:12:55 by tiago            ###   ########.fr       */
+/*   Updated: 2026/01/07 15:56:21 by tsimao-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ int	ft_printf(char const *str, ...)
 	int		len;
 	int		check;
 
+	if (!str)
+		return (-1);
 	va_start(vargs, str);
 	len = 0;
 	while (*str)
@@ -46,23 +48,20 @@ int	ft_printf(char const *str, ...)
 		{
 			check = ft_conversion(*(++str), vargs);
 			if (check == -1)
-				return (-1);
+				return (va_end(vargs), -1);
 			len += check;
 		}
+		else if (write(1, str, 1) == -1)
+			return (va_end(vargs), -1);
 		else
-		{
-			if (write(1, str, 1) == -1)
-				return (-1);
 			len++;
-		}
 		str++;
 	}
-	va_end(vargs);
-	return (len);
+	return (va_end(vargs), len);
 }
 
 // %c - character
-// NULL char: retorna nada
+// NULL char: returns nothing
 
 // %s - string
 // NULL: retorna "(null)"

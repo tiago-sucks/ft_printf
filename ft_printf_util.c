@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf_util.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tiago <tiago@student.42.fr>                +#+  +:+       +#+        */
+/*   By: tsimao-g <tsimao-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 19:05:42 by tiago             #+#    #+#             */
-/*   Updated: 2025/12/17 21:15:48 by tiago            ###   ########.fr       */
+/*   Updated: 2026/01/07 15:56:38 by tsimao-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	ft_putnbr(long nb)
 		len += temp;
 	}
 	sum = (nb % 10) + '0';
-	if (write(1, &sum, 1) == -1) //ele printa sempre o número, mas verifica se a sum for -1, retorna -1
+	if (write(1, &sum, 1) == -1)
 		return (-1);
 	len++;
 	return (len);
@@ -116,6 +116,3 @@ int	ft_putptr(void *ptr)
 	len += temp;
 	return (len);
 }
-
-//$? retorna sempre o ultimo return da main
-//puthex é tipo putnbr mas o numero para a base de hexadecimal usando a devida posição do pointer base
