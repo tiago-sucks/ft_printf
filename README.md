@@ -101,9 +101,9 @@ The implementation follows a **linear parsing algorithm** with a **dispatch patt
 
 #### Performance
 
-**Time (how fast)**: The algorithm processes each character in the format string exactly once. If you double the input size, the processing time roughly doubles — this is called **linear scaling**.
+**Time**: **Linear scaling** - The algorithm processes each character in the format string exactly once. If you double the input size, the processing time roughly doubles.
 
-**Memory (how much space)**: The recursive number conversion functions use the call stack. For a number like 1000, the function calls itself 4 times (1000 → 100 → 10 → 1). The memory used grows very slowly compared to the number size — this is called **logarithmic scaling**.
+**Memory**: **Logarithmic scaling** - The recursive number conversion functions use the call stack. For a number like 1000, the function calls itself 4 times (1000 > 100 > 10 > 1). The memory used grows very slowly compared to the number size.
 
 #### Why This Algorithm?
 
@@ -118,7 +118,7 @@ The implementation follows a **linear parsing algorithm** with a **dispatch patt
 
    Example for number 42 in decimal:
    ```
-   ft_putnbr(42) → ft_putnbr(4) → writes '4' → returns → writes '2'
+   ft_putnbr(42) > ft_putnbr(4) > writes '4' > returns > writes '2'
    ```
 
 4. **Dispatch Pattern over Function Pointers**: The `ft_conversion` function uses if-else chains rather than a function pointer table because:
