@@ -45,7 +45,7 @@ Include the header in your C file:
 Compile your program with the library:
 
 ```bash
-gcc -Wall -Wextra -Werror main.c libftprintf.a -o program
+cc -Wall -Wextra -Werror main.c libftprintf.a -o program
 ```
 
 ### Example
@@ -101,12 +101,6 @@ The implementation follows a **linear parsing algorithm** with a **dispatch patt
 5. Return total character count
 ```
 
-#### Performance
-
-**Time**: **Linear scaling** - The algorithm processes each character in the format string exactly once. If you double the input size, the processing time roughly doubles.
-
-**Memory**: **Logarithmic scaling** - The recursive number conversion functions use the call stack. For a number like 1000, the function calls itself 4 times (1000 > 100 > 10 > 1). The memory used grows very slowly compared to the number size.
-
 #### Why This Algorithm?
 
 1. **Single-Pass Efficiency**: The format string is traversed exactly once, minimizing overhead.
@@ -154,15 +148,6 @@ char *base = "0123456789abcdef";  // or uppercase variant
 
 **Justification**: Using a string as a lookup table provides instant digit-to-character conversion via direct indexing (`base[remainder]`), avoiding conditional logic for each hex digit.
 
-#### 3. Implicit Stack (Recursion)
-
-The recursive functions use the call stack to:
-- Store intermediate division results
-- Ensure correct digit ordering (MSB first)
-- Handle sign separately before recursion
-
-**Trade-off**: Recursion depth is bounded by the number of digits (max ~20 for 64-bit numbers in decimal), making stack overflow practically impossible for valid inputs.
-
 ### Error Handling Strategy
 
 All output functions return `-1` on `write()` failure, propagating errors upward:
@@ -173,15 +158,6 @@ if (write(1, &c, 1) == -1)
 ```
 
 This ensures `ft_printf` can detect and report I/O errors, matching the behavior of standard `printf()` which returns a negative value on output error.
-
-### Design Decisions Summary
-
-| Decision | Alternative | Justification |
-|----------|-------------|---------------|
-| Recursive conversion | Iterative with buffer | Simpler code, automatic digit ordering |
-| Direct `write()` | Buffered output | Lower memory, simpler implementation |
-| If-else dispatch | Function pointer table | Clearer code for small specifier set |
-| Return length counting | Void functions | Matches `printf()` specification |
 
 ## Resources
 
